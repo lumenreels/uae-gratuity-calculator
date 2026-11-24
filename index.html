@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UAE End of Service Gratuity Calculator 2026 | حاسبة مكافأة نهاية الخدمة</title>
+<meta name="description" content="Free UAE end of service gratuity calculator for private sector employees. 21 days per year for the first 5 years, 30 days after, capped at 2 years of basic wage.">
+<style>
+body{font-family:system-ui,Arial,sans-serif;max-width:680px;margin:0 auto;padding:16px;line-height:1.5;color:#1b1f23}
+h1{font-size:1.6rem;margin-bottom:0}.ar{direction:rtl;color:#555;margin-top:4px}
+label{display:block;margin-top:12px;font-weight:600}input,select{width:100%;padding:10px;font-size:1rem;box-sizing:border-box}
+button{margin-top:16px;padding:12px 20px;font-size:1rem;background:#0b6b3a;color:#fff;border:0;border-radius:6px;cursor:pointer}
+#out{margin-top:20px;padding:16px;background:#f0f7f2;border-radius:8px;display:none}
+#out b{font-size:1.5rem}small,.note{color:#555;font-size:.9rem}a{color:#0b6b3a}
+</style></head><body>
+<h1>UAE End of Service Gratuity Calculator</h1>
+<p><a href="ar.html">النسخة العربية</a></p>
+<p class="ar">حاسبة مكافأة نهاية الخدمة للقطاع الخاص في الإمارات</p>
+<p>For expatriate employees in private-sector mainland jobs with a full-time contract. Enter your last <b>basic</b> salary (not housing, transport or other allowances).</p>
+<label>Last monthly basic salary (AED) / الراتب الأساسي
+<input id="sal" type="number" min="0" step="any" placeholder="e.g. 5000"></label>
+<label>Start date / تاريخ البدء <input id="s" type="date"></label>
+<label>End date / تاريخ الانتهاء <input id="e" type="date"></label>
+<label>Unpaid leave days (not counted) / أيام الإجازة بدون راتب
+<input id="u" type="number" min="0" value="0"></label>
+<button onclick="calc()">Calculate / احسب</button>
+<div id="out"></div>
+<h2>How it is calculated</h2>
+<ul>
+<li>Less than 1 year of continuous service: no gratuity.</li>
+<li>First 5 years: 21 days of basic wage per year. After that: 30 days per year. Part years count in proportion.</li>
+<li>Daily wage here = monthly basic / 30. The total cannot exceed 2 years of wage (24 months of basic).</li>
+<li>Unpaid absence days are not counted as service.</li>
+<li>The employer can deduct amounts you owe, and must pay within 14 days of the end of the contract.</li>
+</ul>
+<p class="note">Source: <a href="https://u.ae/en/information-and-services/jobs/sector-of-employment/employment-in-the-private-sector/end-of-service-benefits-for-employees-in-the-private-sector">u.ae, End of service benefits for workers in the private sector</a>. Free zones (DIFC, ADGM), part-time contracts, and the MoHRE savings scheme follow different rules. This is an estimate, not legal advice. Check your contract and MoHRE if there is a dispute.</p>
+<script>var LANG={err:"Please enter a salary and valid dates.",none:"Service is under 1 year ({y}). No gratuity is due.",svc:"Service counted (years):",days:"Gratuity days:",est:"Estimated gratuity:",cap:"Capped at 2 years of wage."};</script>
+<script src="calc.js"></script>
+<script>
+function calc(){
+ var sal=parseFloat(document.getElementById('sal').value),u=parseFloat(document.getElementById('u').value)||0,o=document.getElementById('out');
+ var r=gratuity(sal,document.getElementById('s').value,document.getElementById('e').value,u);
+ o.style.display='block';
+ if(r.error){o.textContent=LANG.err;return}
+ if(!r.eligible){o.innerHTML=LANG.none.replace('{y}',r.years.toFixed(2));return}
+ o.innerHTML=LANG.svc+' <b>'+r.years.toFixed(2)+'</b><br>'+LANG.days+' '+r.days.toFixed(1)+'<br>'+LANG.est+' <b>AED '+Math.round(r.amount).toLocaleString('en-US')+'</b>'+(r.capped?'<br><small>'+LANG.cap+'</small>':'');
+}
+</script></body></html>
